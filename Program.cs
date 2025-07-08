@@ -11,17 +11,19 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin() // Do NOT use in production with credentials
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins("http://localhost:4000") // Only allow local frontend
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
 var app = builder.Build();
-
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors(); // CORS must be before UseAuthorization and endpoints
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
