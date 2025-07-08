@@ -11,7 +11,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("localhost:4000")
+        policy.WithOrigins("http://localhost:4000", "http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -22,8 +22,8 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors(); // CORS must be before UseAuthorization and endpoints
 app.UseAuthorization();
-app.UseCors();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/chatHub");
