@@ -7,12 +7,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
+app.UseCors();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/chatHub");
